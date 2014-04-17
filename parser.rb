@@ -48,11 +48,16 @@ class Parser
   end
 
   def add_data(section,key,value)
+
+    if section.empty? || key.empty?
+      raise Exception, "Please enter valid section and key"
+    end
+
     # check if section exists?
     if @data.has_key?(section)
       # check if section with key exists then append the value
       if  @data[section].has_key?(key)
-        value = "#{@data[section][key]} \r #{value}"
+        value = get_data(section,key) + "\r #{value}"
       end
       @data[section].merge!({key => value})
     else
@@ -61,6 +66,11 @@ class Parser
   end
 
   def get_data(section,key)
+
+    if section.empty? || key.empty?
+      raise Exception, "Please enter valid section and key"
+    end
+
     @data[section][key] if @data.has_key?(section)
   end
 
