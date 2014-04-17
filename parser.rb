@@ -1,3 +1,14 @@
+class LpString < String
+  def isKeyValuePair?
+    self.include? ':'
+  end
+
+  def isSection?
+    self[0] == '['
+  end
+end
+
+
 class Parser
 
   attr_accessor :data, :filename
@@ -10,18 +21,17 @@ class Parser
   def parse
     File.open(filename, "r") do |infile|
       while (line = infile.gets)
+        line = LpString.new(line)
         line.strip!
         unless line.empty?
-          # chacking if line is a header
-          if line[0] == '['
 
+          # chacking if line is a header
+          if line.isSection?
             # convert "[ meta data ]" to "meta data"
             section = line.gsub(/['\['\]]/,'').strip
-
           else
-
             # check if line is a key/value pair
-            if line.include? ':'
+            if line.isKeyValuePair?
               key_value = line.split(':')
               section = section
               key = key_value[0].strip
@@ -30,8 +40,8 @@ class Parser
             else
               add_data(section,key,line)
             end
-
           end
+
         end
       end
     end
@@ -69,10 +79,10 @@ class Parser
 end
 
 
-# parser = Parser.new("parser-test.txt")
-# parser.parse
-# parser.add_data('header','k1','k2')
-# parser.add_data('header1','k1','k2')
-# parser.get_data('header','k1')
-# parser.data # display data hash
-# parser.save_file('ripan.txt') #save data hash to file
+parser = Parser.new("parser-test.txt")
+parser.parse
+parser.add_data('header','k1','k2')
+parser.add_data('header1','k1','k2')
+parser.get_data('header','k1')
+parser.data # display data hash
+parser.save_file('ripan.txt') #save data hash to file
