@@ -13,5 +13,8 @@ parser.get_data('header','k1')
 
 parser.data # display data hash 
 
-parser.save_file('target.txt') 
+parser.save_file('target.txt')  
 
+
+
+Ruby Version: ruby 2.0.0p353 (2013-11-22 revision 43784) [x86_64-darwin12.5.0]
